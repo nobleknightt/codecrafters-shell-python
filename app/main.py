@@ -14,8 +14,9 @@ def main():
         if command[0] == "echo":
             sys.stdout.write(" ".join(command[1:]))    
         else:
-            sys.stdout.write(f"{command[0]}: command not found\n")
+            sys.stdout.write(f"{command[0]}: command not found")
     
+        sys.stdout.write("\n")
         sys.stdout.flush()
 
 
