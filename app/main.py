@@ -7,11 +7,12 @@ def main():
         sys.stdout.flush()
         
         command = input().split()
+        
         if command[0] == "exit":
             sys.exit(0)
 
         if command[0] == "echo":
-            sys.stdout.write(*command[1:])    
+            sys.stdout.write(" ".join(command[1:]))    
         else:
             sys.stdout.write(f"{command[0]}: command not found\n")
     
