@@ -10,7 +10,7 @@ def main():
         if command == "exit":
             sys.exit(0)
 
-        sys.stdout.write(f"{command}: command not found\n")
+        sys.stdout.write(f"{command[0]}: command not found\n")
         sys.stdout.flush()
 
 
