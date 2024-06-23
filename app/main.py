@@ -1,4 +1,8 @@
 import sys
+import os
+
+from pathlib import Path
+
 
 shell_builtins = {"exit", "echo", "type"}
 
@@ -18,7 +22,20 @@ def main():
             if command[1] in shell_builtins:
                 sys.stdout.write(f"{command[1]} is a shell builtin")
             else:
-                sys.stdout.write(f"{command[1]}: not found")
+                PATH = os.environ.get('PATH')
+                found = False
+                if PATH is not None:
+                    paths = PATH.split(":")
+                    for path in paths:                        
+                        for file in Path(path).iterdir():
+                            if file.is_file() and file.name.endswith(f"/{command[1]}"):
+                                found = True
+                                sys.stdout.write(f"{command[1]} is {path}/{command[1]}")
+                                break
+                        if found:
+                            break
+                if not found:
+                    sys.stdout.write(f"{command[1]}: not found")
         else:
             sys.stdout.write(f"{command[0]}: command not found")
     
