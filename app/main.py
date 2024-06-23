@@ -41,9 +41,12 @@ def main():
             sys.stdout.write(os.getcwd())
         elif command[0] == "cd":
             path = Path(command[1])
+            if command[1].startswith("~"):
+                path = path.expanduser()
+
             if path.exists() and path.is_dir():
                 is_program = True
-                os.chdir(command[1])
+                os.chdir(path)
             else:
                 sys.stdout.write(f"{command[0]}: {command[1]}: No such file or directory")
         else:
