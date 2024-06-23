@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 
 
-shell_builtins = {"exit", "echo", "type", "pwd"}
+shell_builtins = {"exit", "echo", "type", "pwd", "cd"}
 
 def find_command(command):
     paths = os.environ.get('PATH') or ""    
@@ -38,7 +38,14 @@ def main():
                 else:
                     sys.stdout.write(f"{command[1]}: not found")
         elif command[0] == "pwd":
-            sys.stdout.write(str(Path(__file__).cwd()))
+            sys.stdout.write(os.getcwd())
+        elif command[0] == "cd":
+            path = Path(command[1])
+            if path.exists() and path.is_dir():
+                is_program = True
+                os.chdir(command[1])
+            else:
+                sys.stdout.write(f"{command[0]}: {command[1]}: No such file or directory")
         else:
             program = find_command(command[0])
             if program:
