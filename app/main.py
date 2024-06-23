@@ -4,20 +4,15 @@ import os
 from pathlib import Path
 
 
-shell_builtins = {"exit", "echo", "type"}
+shell_builtins = {"exit", "echo", "type", "pwd"}
 
 def find_command(command):
-    PATH = os.environ.get('PATH')
-    if PATH is not None:
-        paths = PATH.split(":")
-        for path in paths:
-            dir = Path(path)
-            if dir.exists() and dir.is_dir():                       
-                for file in Path(path).iterdir():
-                    if str(file).endswith(f"/{command}"):
-                        return path, str(file)
+    paths = os.environ.get('PATH') or ""    
+    for path in map(lambda s: f"{s}/{command}", paths.split(":")):
+        if Path(path).exists():
+            return path
                     
-    return None, None
+    return None
 
 def main():
     
@@ -37,14 +32,16 @@ def main():
             if command[1] in shell_builtins:
                 sys.stdout.write(f"{command[1]} is a shell builtin")
             else:
-                path, _ = find_command(command[1])
+                path = find_command(command[1])
                 if path:
-                    sys.stdout.write(f"{command[1]} is {path}/{command[1]}")
+                    sys.stdout.write(f"{command[1]} is {path}")
                 else:
                     sys.stdout.write(f"{command[1]}: not found")
+        elif command[0] == "pwd":
+            sys.stdout.write(str(Path(__file__).cwd()))
         else:
-            path, program = find_command(command[0])
-            if path:
+            program = find_command(command[0])
+            if program:
                 is_program = True
                 os.system(" ".join([program, *command[1:]]))                
             else:
