@@ -28,7 +28,7 @@ def main():
                     paths = PATH.split(":")
                     for path in paths:                        
                         for file in Path(path).iterdir():
-                            if file.is_file() and file.name.endswith(f"/{command[1]}"):
+                            if str(file).endswith(f"/{command[1]}"):
                                 found = True
                                 sys.stdout.write(f"{command[1]} is {path}/{command[1]}")
                                 break
